@@ -7,7 +7,8 @@
 
 body {
     font-size: 15pt;
-    background-color: #125DBE;
+    /*background-color: #125DBE;*/
+    background: linear-gradient(to right, #a5d1e1, #199fb1, #0d5c75);
     font-family: 'Roboto', sans-serif;
     position: relative;
     height: 100vh;
@@ -15,7 +16,7 @@ body {
 
 .content {
     border-radius: 15px;
-    padding: 10px;
+    padding: 20px;
     background: rgba(192, 192, 192, 0.418);
     position: absolute;
     top: 50%;
@@ -85,4 +86,16 @@ body:after {
     font-weight: 500;
     margin-top: 50px;
     font-family: 'Roboto', sans-serif;
+}
+
+.content form img {}
+
+.alert {
+    letter-spacing: 2px;
+    font-size: 11px;
+    line-height: 30px;
+}
+
+h3 {
+    text-transform: uppercase;
 }

@@ -1,5 +1,5 @@
 <?php 
-	date_default_timezone_set('America/Paraguay'); 
+	date_default_timezone_set('america/asuncion'); 
 	
 	function fechaC(){
 		$mes = array("","Enero", 
