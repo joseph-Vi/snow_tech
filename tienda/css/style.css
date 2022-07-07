@@ -263,6 +263,10 @@ select {
     border-radius: 5px;
 }
 
+.notitemone option:first-child{
+    display: none;
+}
+
 .btn_save {
     font-size: 12pt;
     background: #12a4c6;
