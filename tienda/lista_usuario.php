@@ -47,7 +47,7 @@ include "../conexion.php";
                         <td>
                             <a href="editar_usuario.php?id=<?php echo $data['id_usuario'] ?>" class="link_edit"><i class="fas fa-pen">Editar</i></a>
                             |
-                            <a href="#" class="link_delete"><i class="fas fa-trash">Eliminar</i></a>
+                            <a href="eliminar_usuario.php?id=<?php echo $data['id_usuario'] ?>" class="link_delete"><i class="fas fa-trash">Eliminar</i></a>
                         </td>
                     </tr>
             <?php

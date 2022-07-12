@@ -3,27 +3,34 @@ include "../conexion.php";
 
 if (!empty($_POST)) {
     $alert = '';
-    if (empty($_POST['nombre']) || empty($_POST['usuario']) || empty($_POST['correo']) || empty($_POST['clave']) || empty($_POST['rol'])) {
+    if (empty($_POST['nombre']) || empty($_POST['usuario']) || empty($_POST['correo']) || empty($_POST['rol'])) {
         $alert = '<p class="msg_error">Todos los campos son obligatorios.</p>';
     } else {
 
+        $idusuario = $_POST['id_usuario'];
         $nombre = $_POST['nombre'];
         $user = $_POST['usuario'];
         $email = $_POST['correo'];
         $pass = md5($_POST['clave']);
         $rol = $_POST['rol'];
 
-        $query = mysqli_query($conection, "SELECT * FROM usuario WHERE usuario = '$user' OR correo = '$email'");
+        $query = mysqli_query($conection, "SELECT * FROM usuario WHERE (usuario = '$user' AND id_usuario != $idusuario) OR (correo = '$email' AND id_usuario != $idusuario)");
         $result = mysqli_fetch_array($query);
 
         if ($result > 0) {
             $alert = '<p class="msg_error">El correo o el usuario ya existe.</p>';
         } else {
-            $query_insert = mysqli_query($conection, "INSERT INTO usuario (nombre, correo, usuario, clave, rol) VALUE ('$nombre', '$email', '$user', '$pass', '$rol')");
-            if ($query_insert) {
-                $alert = '<p class="msg_save">Usuario creado correctamente.</p>';
+
+            if(empty($_POST['clave'])){
+                $sql_update = mysqli_query($conection, "UPDATE usuario SET nombre = '$nombre', correo = '$email', usuario = '$user', rol = '$rol' WHERE id_usuario = $idusuario");
+            }else{
+                $sql_update = mysqli_query($conection, "UPDATE usuario SET nombre = '$nombre', correo = '$email', clave = '$pass', usuario = '$user', rol = '$rol' WHERE id_usuario = $idusuario");
+            }
+
+            if ($sql_update) {
+                $alert = '<p class="msg_save">Usuario editado correctamente.</p>';
             } else {
-                $alert = '<p class="msg_error">Error al crear el usuario.</p>';
+                $alert = '<p class="msg_error">Error al editar el usuario.</p>';
             }
         }
     }
@@ -36,7 +43,6 @@ if (empty($_GET['id'])) {
 }
 
 $iduser = $_GET['id'];
-
 $sql = mysqli_query($conection, "SELECT u.id_usuario, u.nombre, u.correo, u.usuario, (u.rol) AS id_rol, (r.rol) AS rol FROM usuario u INNER JOIN rol r ON u.rol = r.id_rol WHERE id_usuario = $iduser");
 $result_sql = mysqli_num_rows($sql);
 
@@ -83,6 +89,8 @@ if ($result_sql == 0) {
 
             <form action="" method="post">
 
+                    <input type="hidden" name="id_usuario" value="<?php echo $iduser; ?>">
+
                 <label for="nombre">Nombre</label>
                 <input type="text" name="nombre" id="nombre" placeholder="Nombre Completo" value="<?php echo $nombre; ?>">
 
@@ -92,8 +100,8 @@ if ($result_sql == 0) {
                 <label for="correo">Correo Electrónico</label>
                 <input type="email" name="correo" id="correo" placeholder="ejemplo@gmail.com" value="<?php echo $email; ?>">
 
-                <!--<label for="clave">Contraseña</label>
-                <input type="password" name="clave" id="clave" placeholder="****************" readonly>-->
+                <label for="clave">Contraseña</label>
+                <input type="password" name="clave" id="clave" placeholder="Contraseña" readonly>
 
                 <label for="rol">Tipo de Usuario</label>
                 <?php
